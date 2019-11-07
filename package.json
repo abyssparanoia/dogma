@@ -38,6 +38,7 @@
     "lint:elm": "elm-review --elmjson ./app/elm.json",
     "lint:ts": "eslint -c ./.eslintrc.json './functions/**/*.ts' --fix",
     "start:app": "yarn workspace app start",
+    "deploy": "firebase deploy",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "clean": "rimraf functions/dist"
