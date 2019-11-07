@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "elm make ./src/index.elm"
+    "build": "elm make ./src/main.elm"
   }
 }
