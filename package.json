@@ -1,0 +1,43 @@
+{
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.3.3",
+    "@typescript-eslint/parser": "^2.3.3",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-config-xo": "^0.27.2",
+    "eslint-config-xo-typescript": "^0.21.0",
+    "eslint-plugin-jest": "^23.0.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.8",
+    "lint-staged": "^9.4.2",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
+    "typescript": "^3.7.2"
+  },
+  "name": "dogma",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/abyssparanoia/dogma.git",
+  "author": "abyssparanoia <y.sugimoto.paranoia@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn clean && yarn build:cjs && yarn build:esm",
+    "lint": "eslint -c ./.eslintrc.json './functions/**/*.ts' --fix",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "prepublishOnly": "yarn test && yarn build",
+    "clean": "rimraf esm cjs"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./functions/**/*.ts": [
+      "yarn lint",
+      "git add"
+    ]
+  }
+}
