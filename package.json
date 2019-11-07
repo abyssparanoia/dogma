@@ -21,13 +21,22 @@
   "repository": "https://github.com/abyssparanoia/dogma.git",
   "author": "abyssparanoia <y.sugimoto.paranoia@gmail.com>",
   "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "app",
+      "functions"
+    ],
+    "nohoist": []
+  },
   "scripts": {
-    "build": "yarn clean && yarn build:cjs && yarn build:esm",
+    "build": "yarn clean && yarn build:functions && yarn build:app",
+    "build:app": "yarn workspace app build",
+    "build:functions": "yarn workspace functions build",
     "lint": "eslint -c ./.eslintrc.json './functions/**/*.ts' --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "prepublishOnly": "yarn test && yarn build",
-    "clean": "rimraf esm cjs"
+    "clean": "rimraf functions/dist"
   },
   "husky": {
     "hooks": {
