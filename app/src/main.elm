@@ -52,7 +52,7 @@ listVersions = Http.request
   }
 
 versionDecoder : Decoder Version
-versionDecoder = Json.Decode.map3 Version 
+versionDecoder = Json.Decode.map2 Version 
           (Json.Decode.field "id" Json.Decode.string)
           (Json.Decode.field "name" Json.Decode.string)
 
