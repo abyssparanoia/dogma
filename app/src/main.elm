@@ -30,7 +30,7 @@ init _ =
 
 
 type alias Model =
-    { name : String, articles : List Article, jwt : String ,versions: List Version}
+    { name : String, articles : List Article, jwt : String, versions : List Version }
 
 
 type Msg
@@ -38,15 +38,18 @@ type Msg
     | GotProfile (Result Http.Error String)
     | GetArticles
     | GotArticles (Result Http.Error (List Article))
-    | ListVersionsRequest 
+    | ListVersionsRequest
     | ListVersionsDone (Result Http.Error (List Version))
 
 
 type alias Article =
     { id : Int, title : String, author : String }
 
-type alias Version = 
-    { id : String, name: String}
+
+type alias Version =
+    { id : String, name : String }
+
+
 
 -- UPDATE
 
@@ -79,19 +82,19 @@ update msg model =
 
                 Err _ ->
                     ( model, Cmd.none )
-      
+
         ListVersionsRequest ->
-              ( model
-              , listVersions
-              )
+            ( model
+            , listVersions
+            )
 
         ListVersionsDone result ->
             case result of
                 Ok versions ->
-                  ({model | versions = versions}, Cmd.none)
-                
+                    ( { model | versions = versions }, Cmd.none )
+
                 Err _ ->
-                  (model , Cmd.none)
+                    ( model, Cmd.none )
 
 
 
@@ -107,7 +110,7 @@ view model =
             (articlesView
                 model.articles
             )
-        , button [ onClick ListVersionsRequest ] [ text "Get versions" ]        
+        , button [ onClick ListVersionsRequest ] [ text "Get versions" ]
         , div []
             (versionsView
                 model.versions
@@ -133,8 +136,9 @@ articlesView articles =
         )
         articles
 
+
 versionsView : List Version -> List (Html msg)
-versionsView versions = 
+versionsView versions =
     List.map
         (\version ->
             p []
@@ -148,6 +152,7 @@ versionsView versions =
                 ]
         )
         versions
+
 
 
 -- HTTP
@@ -204,29 +209,36 @@ articlesDecoder : Decoder (List Article)
 articlesDecoder =
     Json.Decode.list articleDecoder
 
+
 listVersions : Cmd Msg
-listVersions = Http.request
-  {
-    method = "GET"
-    , headers =
-        [ Http.header "Authorization" ("Bearer " ++ "TOKEN")
-        , Http.header "Accept" "application/json"
-        , Http.header "Content-Type" "application/json"
-        ]
-    , url = "https://us-central1-dogma-e74db.cloudfunctions.net/ListVersions"
-    , expect = Http.expectJson ListVersionsDone versionsDecoder
-    , body = Http.emptyBody
-    , timeout = Nothing
-    , tracker = Nothing
-  }
+listVersions =
+    Http.request
+        { method = "GET"
+        , headers =
+            [ Http.header "Authorization" ("Bearer " ++ "TOKEN")
+            , Http.header "Accept" "application/json"
+            , Http.header "Content-Type" "application/json"
+            ]
+        , url = "https://us-central1-dogma-e74db.cloudfunctions.net/ListVersions"
+        , expect = Http.expectJson ListVersionsDone versionsDecoder
+        , body = Http.emptyBody
+        , timeout = Nothing
+        , tracker = Nothing
+        }
+
 
 versionDecoder : Decoder Version
-versionDecoder = Json.Decode.map2 Version 
-          (Json.Decode.field "id" Json.Decode.string)
-          (Json.Decode.field "name" Json.Decode.string)
+versionDecoder =
+    Json.Decode.map2 Version
+        (Json.Decode.field "id" Json.Decode.string)
+        (Json.Decode.field "name" Json.Decode.string)
+
 
 versionsDecoder : Decoder (List Version)
-versionsDecoder = Json.Decode.list versionDecoder
+versionsDecoder =
+    Json.Decode.list versionDecoder
+
+
 
 -- SUBSCRIPTION
 
