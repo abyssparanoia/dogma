@@ -1,70 +1,3 @@
--- init : () -> (Model, Cmd Msg)
--- init _ = ({count = 0, versions= []},Cmd.none)
-
--- -- MODEL
-
--- type alias Model = {count : Int, versions: List Version}
-
-
--- type alias Version = {id : String, name: String}
-
--- -- UPDATE
-
--- type Msg = Increment | Decrement| ListVersionsRequest | ListVersionsDone (Result Http.Error (List Version))
-
-
--- update : Msg -> Model -> Model
--- update msg model =
---   case msg of
---     Increment ->
---       model + 1
-
---     Decrement ->
---       model - 1
-
--- -- HTTP
-
--- listVersions : Cmd Msg
--- listVersions = Http.request
---   {
---     method = "GET"
---     , headers =
---         [ Http.header "Authorization" ("Bearer " ++ "TOKEN")
---         , Http.header "Accept" "application/json"
---         , Http.header "Content-Type" "application/json"
---         ]
---     , url = "http://localhost:3000/listVersions"
---     , expect = Http.expectJson ListVersionsDone versionsDecoder
---     , body = Http.emptyBody
---     , timeout = Nothing
---     , tracker = Nothing
---   }
-
--- versionDecoder : Decoder Version
--- versionDecoder = Json.Decode.map2 Version 
---           (Json.Decode.field "id" Json.Decode.string)
---           (Json.Decode.field "name" Json.Decode.string)
-
--- versionsDecoder : Decoder (List Version)
--- versionsDecoder = Json.Decode.list versionDecoder
-
-
--- -- VIEW
-
--- view : Model -> Html Msg
--- view model =
---   div []
---     [ button [ onClick Decrement ] [ text "-" ]
---     , div [] [ text (String.fromInt model) ]
---     , button [ onClick Increment ] [ text "+" ]
---     ]
-
--- -- SUBSCRIPTION
-
--- subscriptions : Model -> Sub Msg
--- subscriptions model =
---     Sub.none
-
 module Main exposing (Msg(..), main, update, view)
 
 import Browser
@@ -174,6 +107,11 @@ view model =
             (articlesView
                 model.articles
             )
+        , button [ onClick ListVersionsRequest ] [ text "Get versions" ]        
+        , div []
+            (versionsView
+                model.versions
+            )
         ]
 
 
@@ -195,6 +133,21 @@ articlesView articles =
         )
         articles
 
+versionsView : List Version -> List (Html msg)
+versionsView versions = 
+    List.map
+        (\version ->
+            p []
+                [ text
+                    ("version: "
+                        ++ "id: "
+                        ++ version.id
+                        ++ " name: "
+                        ++ version.name
+                    )
+                ]
+        )
+        versions
 
 
 -- HTTP
