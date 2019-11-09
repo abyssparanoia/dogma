@@ -8,6 +8,10 @@ export const helloWorld = functions.https.onRequest((request, response) => {
 })
 
 export const ListVersions = functions.https.onRequest((_, response) => {
+  response.set('Access-Control-Allow-Origin', '*')
+  response.set('Access-Control-Allow-Methods', '*')
+  response.set('Access-Control-Allow-Headers', '*')
+
   const versions = [
     {
       id: 'id1',
