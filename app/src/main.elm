@@ -260,7 +260,7 @@ listVersions = Http.request
         , Http.header "Accept" "application/json"
         , Http.header "Content-Type" "application/json"
         ]
-    , url = "http://localhost:3000/listVersions"
+    , url = "https://us-central1-dogma-e74db.cloudfunctions.net/ListVersions"
     , expect = Http.expectJson ListVersionsDone versionsDecoder
     , body = Http.emptyBody
     , timeout = Nothing
