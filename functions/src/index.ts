@@ -7,7 +7,7 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   response.send('Hello from Firebase!')
 })
 
-export const getVersions = functions.https.onRequest((_, response) => {
+export const ListVersions = functions.https.onRequest((_, response) => {
   const versions = [
     {
       id: 'id1',
